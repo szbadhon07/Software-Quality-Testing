@@ -1,0 +1,242 @@
+Code Login :
+
+class EAPageObject
+    {
+
+
+        public EAPageObject()
+        {
+            PageFactory.InitElements(PropertiesCollection.driver, this);
+        }
+
+
+        [FindsBy(How = How.Id, Using = "TitleId")]
+        public IWebElement ddlTitleID { get; set; }
+
+        [FindsBy(How = How.Name, Using = "Initial")]
+        public IWebElement txtInitial { get; set; }
+
+
+        [FindsBy(How = How.Name, Using = "FirstName")]
+        public IWebElement txtFirstName { get; set; }
+
+
+        [FindsBy(How = How.Name, Using = "MiddleName")]
+        public IWebElement txtMiddleName { get; set; }
+
+        [FindsBy(How = How.Name, Using = "Save")]
+        public IWebElement btnSave { get; set; }
+
+
+        public void FillUserForm(string intial, string middleName, string firstName)
+        {
+            txtInitial.SendKeys(intial);
+            txtFirstName.SendKeys(firstName);
+            txtMiddleName.SendKeys(middleName);
+            btnSave.Click();
+        }
+
+}
+
+
+    //Login Page Object Class
+    class LoginPageObject
+    {
+
+        public LoginPageObject()
+        {
+            PageFactory.InitElements(PropertiesCollection.driver, this);
+        }
+
+
+        [FindsBy(How = How.Name, Using = "UserName")]
+        public IWebElement txtUserName { get; set; }
+
+        [FindsBy(How = How.Name, Using = "Password")]
+        public IWebElement txtPassword { get; set; }
+
+        [FindsBy(How = How.Name, Using = "Login")]
+        public IWebElement btnLogin { get; set; }
+
+
+
+        public EAPageObject Login(string userName, string password)
+        {
+            //UserName
+            txtUserName.SendKeys(userName);
+            //password
+            txtPassword.SendKeys(password);
+            //Click button
+            btnLogin.Submit();
+
+            //Return the page object
+            return new EAPageObject();
+
+        }
+}
+
+
+Text box/Text Area Control
+
+ public static void EnterText(IWebDriver driver, string element, string value, string elementtype)
+        {
+            if (elementtype == "Id")
+                driver.FindElement(By.Id(element)).SendKeys(value);
+            if (elementtype == "Name")
+                driver.FindElement(By.Name(element)).SendKeys(value);
+        }
+
+ public static void EnterText(IWebDriver driver, string element, string value, string elementtype)
+        {
+            if (elementtype == "Id")
+                driver.FindElement(By.Id(element)).SendKeys(value);
+            if (elementtype == "Name")
+                driver.FindElement(By.Name(element)).SendKeys(value);
+        }
+Button/Checkbox/Option Click
+
+        //Click into a button, Checkbox, option etc
+        public static void Click(IWebDriver driver, string element,string elementtype)
+        {
+           if (elementtype == "Id")
+                driver.FindElement(By.Id(element)).Click();
+             if (elementtype == "Name")
+                driver.FindElement(By.Name(element)).Click();
+        }
+
+        //Click into a button, Checkbox, option etc
+        public static void Click(IWebDriver driver, string element,string elementtype)
+        {
+           if (elementtype == "Id")
+                driver.FindElement(By.Id(element)).Click();
+             if (elementtype == "Name")
+                driver.FindElement(By.Name(element)).Click();
+        }
+Drop Down list box
+
+        //Selecting a drop down control
+        public static void SelectDropDown(IWebDriver driver, string element, string value, string elementtype)
+        {
+           if (elementtype == "Id")
+                new SelectElement(driver.FindElement(By.Id(element))).SelectByText(value);
+             if (elementtype == "Name")
+                new SelectElement(driver.FindElement(By.Name(element))).SelectByText(value);
+        }
+
+        //Selecting a drop down control
+        public static void SelectDropDown(IWebDriver driver, string element, string value, string elementtype)
+        {
+           if (elementtype == "Id")
+                new SelectElement(driver.FindElement(By.Id(element))).SelectByText(value);
+             if (elementtype == "Name")
+                new SelectElement(driver.FindElement(By.Name(element))).SelectByText(value);
+        }
+
+
+
+public class LoginPage
+{
+private IWebDriver webDriver;
+
+[FindsBy(How = How.Id, Using = “PasswordID”)]
+public IWebElement Password { get; set; }
+
+[FindsBy(How = How.Id, Using =”cmdSubmitID”)]
+public IWebElement SubmitButton { get; set; }
+
+[FindsBy(How = How.Id, Using = “txtUserNameID”)]
+public IWebElement UserName { get; set; }
+
+public LoginPage() { }
+
+public LoginPage(IWebDriver webDriver)
+{
+this.webDriver = webDriver;
+
+if(!webDriver.Url.Contains(“Login.aspx”))
+{
+throw new StaleElementReferenceException(“This is not the login page”);
+}
+PageFactory.InitElements(webDriver, this);
+}
+
+public HomePage signIn(string username, string password)
+{
+UserName.SendKeys(username);
+Password.SendKeys(password);
+SubmitButton.Submit();
+
+HomePage homePage = new HomePage(webDriver);
+PageFactory.InitElements(webDriver, homePage);
+return homePage;
+}
+}
+
+
+
+public void ExecuteTest()
+{
+//Login
+SeleniumSetMethods.EnterText(“txtWebID”, “xxxxxxxxx”, “name”);
+//Password
+SeleniumSetMethods.EnterText( “txtPassword”, “xxxxxxxx”, “Name”);
+//Click
+SeleniumSetMethods.Click( “loginButton”, “Name”);
+Console.WriteLine(“The value from Username is : ” + SeleniumGetMethods.GetText(“txtWebID”, “Name”));
+Console.WriteLine(“The value from Password is : ” + SeleniumGetMethods.GetText(“txtPassword”, “Name”));
+
+//Getting value out from Textbox
+public static string GetText(IWebDriver driver, string element, PropertyType elementtype)
+{
+    if (elementtype =="Id")
+        return driver.FindElement(By.Id(element)).GetAttribute("value");
+    if (elementtype == "Name")
+        return driver.FindElement(By.Name(element)).GetAttribute("value");
+    else return String.Empty;
+
+}
+
+//Getting value from Dropdownlist
+public static string GetTextFromDDL(IWebDriver driver, string element, PropertyType elementtype)
+{
+    if (elementtype == "Id")
+        return new SelectElement(driver.FindElement(By.Id(element))).AllSelectedOptions.SingleOrDefault().Text;
+    if (elementtype == "Name")
+        return new SelectElement(driver.FindElement(By.Name(element))).AllSelectedOptions.SingleOrDefault().Text;
+    else return String.Empty;
+}
+
+//Getting value from Dropdownlist
+public static string GetTextFromDDL(IWebDriver driver, string element, PropertyType elementtype)
+{
+    if (elementtype == "Id")
+        return new SelectElement(driver.FindElement(By.Id(element))).AllSelectedOptions.SingleOrDefault().Text;
+    if (elementtype == "Name")
+        return new SelectElement(driver.FindElement(By.Name(element))).AllSelectedOptions.SingleOrDefault().Text;
+    else return String.Empty;
+}
+       public static string GetText(string element,PropertyType elementtype)
+        {
+            if (elementtype == PropertyType.Id)
+                return PropertiesCollection.driver.FindElement(By.Id(element)).GetAttribute("value");
+            if (elementtype == PropertyType.Name)
+                return PropertiesCollection.driver.FindElement(By.Name(element)).GetAttribute("value");
+            else return String.Empty;
+
+        }
+
+        public static string GetTextFromDDL(string element, PropertyType elementtype)
+        {
+            if (elementtype == PropertyType.Id)
+                return new SelectElement(PropertiesCollection.driver.FindElement(By.Id(element))).AllSelectedOptions.SingleOrDefault().Text;
+            if (elementtype == PropertyType.Name)
+                return new SelectElement(PropertiesCollection.driver.FindElement(By.Name(element))).AllSelectedOptions.SingleOrDefault().Text;
+            else return String.Empty;
+       }
+
+
+
+
+
+
+
